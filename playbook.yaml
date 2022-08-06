@@ -1,0 +1,10 @@
+---
+- name: sets up a samba server
+  hosts: servers
+  become: true
+
+  tasks:
+  - name: creates a folder in the root. this is the directory for the primary samba folders
+    file:
+      path: /smbcitsalud
+      state: directory
