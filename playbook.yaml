@@ -5,7 +5,7 @@
 
   tasks:
 
-  - name: sets hostname for mdns 
+  - name: sets hostname for mdns
     hostname:
       name: citsaludserver
 
@@ -23,7 +23,7 @@
         - network-manager
         - openssh-server
         - avahi-daemon
-  
+
   - name: updates the packages
     apt:
       update_cache: yes
@@ -48,12 +48,12 @@
   - name: configures ufw to block everithing silently
     community.general.ufw:
       default: deny
-    
+
   - name: configures ufw to allow ssh (more security will be added by using public key auth)
     community.general.ufw:
       rule: allow
       name: OpenSSH
-       
+
   - name: configures ufw to allow samba on localhost
     community.general.ufw:
       rule: allow
@@ -66,7 +66,7 @@
       rule: allow
       name: Samba
       from_ip: 192.168.0.0/16
-      to_ip: 192.168.0.0/16 
+      to_ip: 192.168.0.0/16
 
   - name: configures ufw to allow samba on 172.0xx.x.x
     community.general.ufw:
@@ -104,13 +104,13 @@
     community.general.ufw:
       state: reloaded
 
-  #######################################################   
+  #######################################################
   #################       </UFW>        #################
-  ####################################################### 
+  #######################################################
 
-  #######################################################   
+  #######################################################
   #################       <SAMBA>       #################
-  ####################################################### 
+  #######################################################
 
   - name: creates a group to be able to view and edit the folders
     group:
@@ -121,7 +121,7 @@
       path: /smbcitsalud
       group: citsaludusers
       state: directory
-      mode: 0660
+      mode: 0770
       recurse: yes
 
   - name: creates a folder in the root. this is the directory for an hdd mirror backup
@@ -129,7 +129,7 @@
       path: /smbmirror
       group: citsaludusers
       state: directory
-      mode: 0660
+      mode: 0770
       recurse: yes
 
   - name: creates a user for the department abastecimiento
@@ -147,7 +147,7 @@
       owner: abastecimiento
       group: citsaludusers
       state: directory
-      mode: 0660
+      mode: 0770
       recurse: yes
 
   - name: creates a user for the department contabilidad
@@ -165,7 +165,7 @@
       owner: contabilidad
       group: citsaludusers
       state: directory
-      mode: 0660
+      mode: 0770
       recurse: yes
 
   - name: creates a user for the department imagenologia
@@ -183,7 +183,7 @@
       owner: imagenologia
       group: citsaludusers
       state: directory
-      mode: 0660
+      mode: 0770
       recurse: yes
 
   - name: creates a user for the department kinesiologia
@@ -201,7 +201,7 @@
       owner: kinesiologia
       group: citsaludusers
       state: directory
-      mode: 0660
+      mode: 0770
       recurse: yes
 
   - name: creates a user for the department recursoshumanos
@@ -219,7 +219,7 @@
       owner: recursoshumanos
       group: citsaludusers
       state: directory
-      mode: 0660
+      mode: 0770
       recurse: yes
 
   - name: creates a user for the company admin
@@ -237,7 +237,7 @@
       owner: admin
       group: citsaludusers
       state: directory
-      mode: 0660
+      mode: 0770
       recurse: yes
 
   - name: creates a user for techical support
@@ -258,9 +258,9 @@
       password: $6$4hd5VnPeOt2uRPsh$HNQWfX2JbzEFQ.bz/wTDXepASWw8ifycfjckKBnTEV1InFVHlwyNePBcYispjNHr.eqBFafFOsGOAynqXAUPb/
       create_home: no
 
-  #######################################################   
+  #######################################################
   #################      </SAMBA>       #################
-  ####################################################### 
+  #######################################################
 
   - name: final messages
     debug:
