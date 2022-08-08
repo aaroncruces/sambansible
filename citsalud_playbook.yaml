@@ -1,5 +1,5 @@
 ---
-- name: sets up a samba server
+- name: "Sets up a samba server. It is asumed to be in a debian-based distro"
   hosts: servers
 # remote_user: citsalud
   become: true
@@ -263,13 +263,13 @@
       password: $6$4hd5VnPeOt2uRPsh$HNQWfX2JbzEFQ.bz/wTDXepASWw8ifycfjckKBnTEV1InFVHlwyNePBcYispjNHr.eqBFafFOsGOAynqXAUPb/
       create_home: no
 
-  - name: adds the smb config 
+  - name: adds the smb config
     copy:
       src: ./smb.conf
       dest: /etc/samba/smb.conf
       force: yes
       mode: 0644
-  
+
   - name: restarts the samba service
     service:
       name: sshd
@@ -294,20 +294,15 @@
       path: /home/soporte/.ssh/id_ed25519
       type: ed25519
       force: no
-  - name: chowns the private key to the user
-    file:
-      path: /home/soporte/.ssh/id_ed25519
-      owner: soporte
-      group: soporte
-      mode: 0400
-  - name: chowns the public key to the user
-    file:
-      path: /home/soporte/.ssh/id_ed25519.pub
       owner: soporte
       group: soporte
       mode: 0400
 
-
+  - name: fetches the pubkey and copies it to here
+    fetch:
+      src: /home/soporte/.ssh/id_ed25519.pub
+      fail_on_missing: no
+      dest: .
   #######################################################
   #################       </SSH>        #################
   #######################################################
@@ -318,4 +313,4 @@
           YOU WILL NEED TO MANUALLY
           -> smbpasswd TO EVERY USER
           -> create an anchor user with uid 999 to reverse ssh
-          
+
