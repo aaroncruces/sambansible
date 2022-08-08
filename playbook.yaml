@@ -1,7 +1,9 @@
 ---
 - name: sets up a samba server
   hosts: servers
+# remote_user: citsalud
   become: true
+  vars_files: variables.yaml
 
   tasks:
 
@@ -23,6 +25,7 @@
         - network-manager
         - openssh-server
         - avahi-daemon
+        - autossh
 
   - name: updates the packages
     apt:
@@ -240,14 +243,16 @@
       mode: 0770
       recurse: yes
 
-  - name: creates a user for techical support
+  - name: creates a user for techical support with sudo access
     user:
       name: soporte
       append: yes
       groups:
         - citsaludusers
+        - sudo
       password: $6$G0TABL01gyipijbF$demVH8eo/Ofjoal1iUQPB7vv62LqlA2XVExwh4VfxThALWaoUa8bLqcYMlZctinbk49TyJRcZYLHdlMOsbV1r0
-      create_home: no
+      create_home: yes
+      shell: /bin/bash
 
   - name: creates a user for a guest
     user:
@@ -258,12 +263,59 @@
       password: $6$4hd5VnPeOt2uRPsh$HNQWfX2JbzEFQ.bz/wTDXepASWw8ifycfjckKBnTEV1InFVHlwyNePBcYispjNHr.eqBFafFOsGOAynqXAUPb/
       create_home: no
 
+  - name: adds the smb config 
+    copy:
+      src: ./smb.conf
+      dest: /etc/samba/smb.conf
+      force: yes
+      mode: 0644
+  
+  - name: restarts the samba service
+    service:
+      name: sshd
+      enabled: yes
+      state: restarted
   #######################################################
   #################      </SAMBA>       #################
+  #######################################################
+
+  #######################################################
+  #################        <SSH>        #################
+  #######################################################
+
+  - name: adds the access ssh key from this pc to the user with sudo access
+    ansible.posix.authorized_key:
+      user: soporte
+      state: present
+      key: "{{ lookup('file', '~/.ssh/soporte.pub') }}"
+
+  - name: "adds ssh key on de sudo user without passphrase (be careful where do you put this on)"
+    community.crypto.openssh_keypair:
+      path: /home/soporte/.ssh/id_ed25519
+      type: ed25519
+      force: no
+  - name: chowns the private key to the user
+    file:
+      path: /home/soporte/.ssh/id_ed25519
+      owner: soporte
+      group: soporte
+      mode: 0400
+  - name: chowns the public key to the user
+    file:
+      path: /home/soporte/.ssh/id_ed25519.pub
+      owner: soporte
+      group: soporte
+      mode: 0400
+
+
+  #######################################################
+  #################       </SSH>        #################
   #######################################################
 
   - name: final messages
     debug:
       msg: |
-        !!! <<< YOU WILL NEED TO MANUALLY:
+          YOU WILL NEED TO MANUALLY
           -> smbpasswd TO EVERY USER
+          -> create an anchor user with uid 999 to reverse ssh
+          
