@@ -29,3 +29,22 @@
       dest: ./../../
       flat: yes
 
+  - name: "makes sure that .ssh/config exists"
+    copy:
+      content: "# this file makes sure that the pubkey is used to log into anoter computer\n"
+      dest: /home/soporte/.ssh/config
+      owner: soporte
+      group: soporte
+      mode: 0644
+      force: no
+
+  - name: "adds the ssh key on the config. Test for line"
+    shell: grep -c ".*soporte.*" /home/soporte/.ssh/config  || true
+    register: test_grep
+
+  - name: "adds tested line. completing the config for use"
+    lineinfile:
+      dest: /home/soporte/.ssh/config
+      line: IdentityFile ~/.ssh/soporte
+    when: test_grep.stdout == "0"
+

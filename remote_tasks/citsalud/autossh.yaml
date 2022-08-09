@@ -1,0 +1,24 @@
+---
+- name: "AUTOSSH REVERSE SSH AS A SERVICE"
+  hosts: servers
+# remote_user: citsalud
+  become: true
+
+  tasks:
+
+  - name: "adds the service to be executed"
+    copy:
+      src: ./../../autossh_ancla.service
+      dest: /etc/systemd/system/
+      owner: root
+      group: root
+      mode: 0755
+      force: no
+
+  - name: reloads and enables the service 
+    systemd:
+      name: autossh_ancla
+      daemon_reload: yes
+      enabled: yes
+      state: started
+

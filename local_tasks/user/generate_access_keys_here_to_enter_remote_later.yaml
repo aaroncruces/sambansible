@@ -18,6 +18,7 @@
       group: "{{ lookup('env', 'USER') }}"
       mode: 0400
       passphrase: "{{ ssh_passphrase }}"
+      comment: "soporte"
 
   - name: "adds the ssh key on the config. Test for line"
     shell: grep -c ".*soporte.*" ~/.ssh/config  || true

@@ -1,0 +1,13 @@
+---
+- name:  ADD PREFETCHED REMOTE SSH KEY TO ANCHOR USER
+  hosts: localhost
+  connection: local
+  become: true
+
+  tasks:
+
+  - name: adds the access ssh key prefetched from previous tasks on the anchor user to be connected
+    ansible.posix.authorized_key:
+      user: ancla
+      state: present
+      key: "{{ lookup('file', './../../soporte.pub') }}"

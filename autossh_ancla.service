@@ -1,0 +1,12 @@
+[Unit]
+Description=AutoSSH reverse tunnel for technical support -> 22
+After=network.target
+
+[Service]
+User=soporte
+Group=soporte
+Environment="AUTOSSH_GATETIME=0"
+ExecStart=/usr/bin/autossh -M 0 -o "ExitOnForwardFailure=yes" -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" -p 5298 -NR 2201:localhost:22 ancla@192.168.1.10  -i /home/soporte/.ssh/soporte
+
+[Install]
+WantedBy=multi-user.target
