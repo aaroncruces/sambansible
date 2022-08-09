@@ -1,0 +1,18 @@
+---
+- name:  adds an unprivileged anchor user to be connected to using reverse ssh 
+  hosts: localhost
+  connection: local
+  become: true
+
+  tasks:
+
+  - name: adds an unprivileged anchor user to be connected to using reverse ssh 
+    user:
+      name: ancla
+      append: yes
+      password: $6$j/F5GnzudzQ3kwyV$Z4KyYzrXRkMNwhwdcW0./ryPGAttpKySIhQmrVf7MDv6.mkc7b5WeZJMk5VQVdEEwCfrhxqEbpU2IYLJQ9sev/
+      create_home: yes
+      shell: /bin/false
+      system: yes
+
+

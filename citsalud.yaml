@@ -1,0 +1,11 @@
+---
+# local sudo
+#- import_playbook: ./local_tasks/create_anchor_user_locally.yaml
+# local non-sudo
+#- import_playbook: ./local_tasks/generate_access_keys_here_to_enter_remote_later.yaml
+# remote sudo
+- import_playbook: ./remote/citsalud/hostname.yaml
+- import_playbook: ./remote/citsalud/apt.yaml
+- import_playbook: ./remote/citsalud/ufw.yaml
+- import_playbook: ./remote/citsalud/samba.yaml
+- import_playbook: ./remote/citsalud/ssh_keys_on_support_account.yaml

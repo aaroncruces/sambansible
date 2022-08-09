@@ -1,0 +1,13 @@
+---
+- name: "HOSTNAME:"
+  hosts: servers
+# remote_user: citsalud
+  become: true
+
+  tasks:
+
+  - name: sets hostname for mdns
+    hostname:
+      name: citsaludserver
+
+

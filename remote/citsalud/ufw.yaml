@@ -1,0 +1,71 @@
+---
+- name: "UFW"
+  hosts: servers
+# remote_user: citsalud
+  become: true
+
+  tasks:
+
+  - name: cleans ufw to default
+    community.general.ufw:
+      state: reset
+
+  - name: configures ufw to block everithing silently
+    community.general.ufw:
+      default: deny
+
+  - name: configures ufw to allow ssh (more security will be added by using public key auth)
+    community.general.ufw:
+      rule: allow
+      name: OpenSSH
+
+  - name: configures ufw to allow samba on localhost
+    community.general.ufw:
+      rule: allow
+      name: Samba
+      from_ip: 127.0.0.1
+      to_ip: 127.0.0.1
+
+  - name: configures ufw to allow samba on 192.168.x.x
+    community.general.ufw:
+      rule: allow
+      name: Samba
+      from_ip: 192.168.0.0/16
+      to_ip: 192.168.0.0/16
+
+  - name: configures ufw to allow samba on 172.0xx.x.x
+    community.general.ufw:
+      rule: allow
+      name: Samba
+      from_ip: 172.16.0.0/12
+      to_ip: 172.16.0.0/12
+
+  - name: configures ufw to allow samba on 10.x.x.x
+    community.general.ufw:
+      rule: allow
+      name: Samba
+      from_ip: 10.0.0.0/8
+      to_ip: 10.0.0.0/8
+
+  - name: configures ufw to allow samba on RCF 4193
+    community.general.ufw:
+      rule: allow
+      name: Samba
+      from_ip: "fc00::/7"
+      to_ip: "fc00::/7"
+
+  - name: configures ufw to allow samba on RFC 3879
+    community.general.ufw:
+      rule: allow
+      name: Samba
+      from_ip: "fec0::/10"
+      to_ip: "fec0::/10"
+
+  - name: enables ufw
+    community.general.ufw:
+      state: enabled
+
+  - name: reloads ufw
+    community.general.ufw:
+      state: reloaded
+

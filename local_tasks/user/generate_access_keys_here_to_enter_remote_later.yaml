@@ -1,27 +1,8 @@
 ---
-- name: "Prelude and preparing for ansible setups. It is asumed to be in an arch-based distro. Sudo section"
-  hosts: localhost
-  connection: local
-  become: true
-  vars_files: variables.yaml
-
-  tasks:
-
-  - name: adds an unprivileged anchor user to be connected to using reverse ssh 
-    user:
-      name: ancla
-      append: yes
-      password: $6$j/F5GnzudzQ3kwyV$Z4KyYzrXRkMNwhwdcW0./ryPGAttpKySIhQmrVf7MDv6.mkc7b5WeZJMk5VQVdEEwCfrhxqEbpU2IYLJQ9sev/
-      create_home: yes
-      shell: /bin/false
-      system: yes
-
-
-- name: "normal user section"
+- name: " generates access keys locally for the user {{ lookup('env', 'USER') }} for later accessing remote"
   hosts: localhost
   connection: local
   become: false
-  vars_files: variables.yaml
   vars_prompt:
   - name: "ssh_passphrase"
     prompt: "Enter the passphrase for the SSH key"
@@ -41,11 +22,10 @@
   - name: "adds the ssh key on the config. Test for line"
     shell: grep -c ".*soporte.*" ~/.ssh/config  || true
     register: test_grep
-    tags: tst
-  - name: "adds tested line"
+
+  - name: "adds tested line. completing the config for use"
     lineinfile:
       dest: ~/.ssh/config
       line: IdentityFile ~/.ssh/soporte
     when: test_grep.stdout == "0"
-    tags: tst
 

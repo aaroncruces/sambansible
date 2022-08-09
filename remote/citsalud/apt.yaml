@@ -1,0 +1,28 @@
+---
+- name: "APT"
+  hosts: servers
+# remote_user: citsalud
+  become: true
+
+  tasks:
+
+  - name: installs samba smb server and ufw firewall
+    apt:
+      name:
+        - samba
+        - ufw
+        - iptables
+        - fail2ban
+        - network-manager
+        - openssh-server
+        - avahi-daemon
+        - autossh
+
+  - name: updates the packages
+    apt:
+      update_cache: yes
+      upgrade: full
+      autoclean: yes
+      autoremove: yes
+      purge: yes
+
