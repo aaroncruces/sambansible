@@ -1,0 +1,4 @@
+add to knownhosts
+add automatic or semiautomatic smbpasswd -a
+add automatic fstab and backup
+delete users

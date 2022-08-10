@@ -1,4 +1,4 @@
----
+--
 - name: "UFW"
   hosts: servers
 # remote_user: citsalud
@@ -17,7 +17,7 @@
   - name: configures ufw to allow ssh (more security will be added by using public key auth)
     community.general.ufw:
       rule: allow
-      name: OpenSSH
+      port: 2201
 
   - name: configures ufw to allow samba on localhost
     community.general.ufw:
