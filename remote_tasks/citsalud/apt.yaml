@@ -17,6 +17,8 @@
         - openssh-server
         - avahi-daemon
         - autossh
+        - cron
+        - rsync
 
   - name: updates the packages
     apt:

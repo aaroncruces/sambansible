@@ -11,3 +11,4 @@
 - import_playbook: ./remote_tasks/citsalud/ssh_keys_on_support_account.yaml
 # local sudo
 - import_playbook: ./local_tasks/sudo/add_remote_ssh_key_to_anchor.yaml
+- import_playbook: ./remote_tasks/citsalud/autossh.yaml
